@@ -1,0 +1,33 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "love-peter",
+      "name": "Peter Chau",
+      "avatar_url": "https://avatars.githubusercontent.com/u/95307706?v=4",
+      "profile": "https://github.com/love-peter",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "all-contributors",
+      "name": "All Contributors",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46410174?v=4",
+      "profile": "https://allcontributors.org",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "web",
+  "projectOwner": "Love-Health",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
