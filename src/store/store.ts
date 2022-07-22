@@ -9,14 +9,14 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import authReducer, { logout as authLogout } from '../reducers/authReducer';
+import configReducer, { logout as authLogout } from '../reducers/configReducer';
 import storage from 'redux-persist/lib/storage';
 import { PersistConfig, Persistor } from 'redux-persist/es/types';
 import { EnvironmentNameEnum } from '../enums/EnvironmentNameEnum';
 import { isServer } from '../constants/server';
 
 export const reducers = combineReducers({
-  auth: authReducer,
+  config: configReducer,
 });
 
 const createNoopStorage = () => {

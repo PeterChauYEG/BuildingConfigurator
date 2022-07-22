@@ -1,12 +1,15 @@
 import VisualizedBuildingRow from './VisualizedBuildingRow';
+import { useAppSelector } from '../hooks/reduxHooks';
+import { selectCurrentFloor } from '../reducers/configReducer';
 
 type Props = {
   floor: string[][];
-  currentFloorI: number;
   floorI: number;
 };
 
-const VisualizedBuildingFloor = ({ floor, floorI, currentFloorI }: Props) => {
+const VisualizedBuildingFloor = ({ floor, floorI }: Props) => {
+  const currentFloorI = useAppSelector(selectCurrentFloor);
+
   let floorStyle =
     'border border-4 p-4 justify-center flex flex-col items-center flip relative top-0 left-0';
 
@@ -21,7 +24,7 @@ const VisualizedBuildingFloor = ({ floor, floorI, currentFloorI }: Props) => {
       <div className={''}></div>
 
       <div className={floorStyle}>
-        {floor.map((row: string[], i: number) => {
+        {floor?.map((row: string[], i: number) => {
           return <VisualizedBuildingRow key={i} row={row} />;
         })}
       </div>

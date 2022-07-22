@@ -5,39 +5,196 @@ import {
   faMinus,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import {
+  selectCurrentFloor,
+  selectCurrentInput,
+  selectHumanReadableBuildingConfig,
+  selectVisualizedBuildingConfig,
+  setCurrentFloor,
+  setCurrentInput,
+  setHumanReadableBuildingConfig,
+  setVisualizedBuildingConfig,
+} from '../reducers/configReducer';
+import { useCallback } from 'react';
+import generateVisualizedBuildingConfig from '../utils/generateVisualizedBuildingConfig';
 
-type Props = {
-  onPrevFloorClicked: (e: any) => void;
-  floorI: number;
-  humanReadableBuildingConfig: string[];
-  onNextFloorClick: (e: any) => void;
-  onRemoveFloorClick: (e: any) => void;
-  onAddFloorClick: (e: any) => void;
-};
+const FloorControlPanel = () => {
+  const dispatch = useAppDispatch();
 
-const FloorControlPanel = ({
-  onPrevFloorClicked,
-  onNextFloorClick,
-  onRemoveFloorClick,
-  onAddFloorClick,
-  floorI,
-  humanReadableBuildingConfig,
-}: Props) => {
+  const currentFloorI = useAppSelector(selectCurrentFloor);
+  const visualizedBuildingConfig = useAppSelector(
+    selectVisualizedBuildingConfig,
+  );
+  const currentInput = useAppSelector(selectCurrentInput);
+  const humanReadableBuildingConfig = useAppSelector(
+    selectHumanReadableBuildingConfig,
+  );
+
+  const handleNextFloorClicked = useCallback(
+    async (e: any) => {
+      if (currentFloorI >= humanReadableBuildingConfig.length - 1) {
+        return;
+      }
+
+      const newHumanReadableBuildingConfig = [...humanReadableBuildingConfig];
+      newHumanReadableBuildingConfig[currentFloorI] = currentInput;
+      const newVisualizedBuildingConfig = generateVisualizedBuildingConfig(
+        newHumanReadableBuildingConfig,
+      );
+
+      await dispatch(
+        setVisualizedBuildingConfig({ config: newVisualizedBuildingConfig }),
+      );
+      await dispatch(
+        setHumanReadableBuildingConfig({
+          config: newHumanReadableBuildingConfig,
+        }),
+      );
+      await dispatch(setCurrentFloor({ floorI: currentFloorI + 1 }));
+      await dispatch(
+        setCurrentInput({
+          input: newHumanReadableBuildingConfig[currentFloorI + 1],
+        }),
+      );
+    },
+    [currentFloorI, currentInput, dispatch, humanReadableBuildingConfig],
+  );
+
+  const handlePrevFloorClicked = useCallback(
+    async (e: any) => {
+      if (currentFloorI === 0) {
+        return;
+      }
+
+      const newHumanReadableBuildingConfig = [...humanReadableBuildingConfig];
+      newHumanReadableBuildingConfig[currentFloorI] = currentInput;
+      const newVisualizedBuildingConfig = generateVisualizedBuildingConfig(
+        newHumanReadableBuildingConfig,
+      );
+
+      await dispatch(
+        setVisualizedBuildingConfig({ config: newVisualizedBuildingConfig }),
+      );
+      await dispatch(
+        setHumanReadableBuildingConfig({
+          config: newHumanReadableBuildingConfig,
+        }),
+      );
+      await dispatch(setCurrentFloor({ floorI: currentFloorI - 1 }));
+      await dispatch(
+        setCurrentInput({
+          input: newHumanReadableBuildingConfig[currentFloorI - 1],
+        }),
+      );
+    },
+    [currentFloorI, humanReadableBuildingConfig, currentInput, dispatch],
+  );
+
+  const handleAddFloorClicked = useCallback(
+    async (e: any) => {
+      let newHumanReadableBuildingConfig = [...humanReadableBuildingConfig];
+
+      newHumanReadableBuildingConfig[currentFloorI] = currentInput;
+
+      if (humanReadableBuildingConfig.length - 1 > currentFloorI) {
+        newHumanReadableBuildingConfig = [
+          ...newHumanReadableBuildingConfig.slice(0, currentFloorI + 1),
+          currentInput,
+          ...newHumanReadableBuildingConfig.splice(currentFloorI + 1),
+        ];
+      } else {
+        newHumanReadableBuildingConfig[currentFloorI + 1] = currentInput;
+      }
+
+      const newVisualizedBuildingConfig = generateVisualizedBuildingConfig(
+        newHumanReadableBuildingConfig,
+      );
+
+      await dispatch(
+        setVisualizedBuildingConfig({ config: newVisualizedBuildingConfig }),
+      );
+      await dispatch(
+        setHumanReadableBuildingConfig({
+          config: newHumanReadableBuildingConfig,
+        }),
+      );
+      await dispatch(setCurrentFloor({ floorI: currentFloorI + 1 }));
+
+      await dispatch(
+        setCurrentInput({
+          input: newHumanReadableBuildingConfig[currentFloorI + 1] || '',
+        }),
+      );
+    },
+    [humanReadableBuildingConfig, currentFloorI, currentInput, dispatch],
+  );
+
+  const handleRemoveFloorClicked = useCallback(
+    async (e: any) => {
+      let newHumanReadableBuildingConfig = [
+        ...humanReadableBuildingConfig.slice(0, currentFloorI),
+        ...humanReadableBuildingConfig.slice(currentFloorI + 1),
+      ];
+
+      if (
+        currentFloorI === 0 &&
+        currentFloorI === humanReadableBuildingConfig.length - 1
+      ) {
+        newHumanReadableBuildingConfig = [
+          ...humanReadableBuildingConfig.slice(0, currentFloorI),
+          '',
+          ...humanReadableBuildingConfig.slice(currentFloorI + 1),
+        ];
+      }
+
+      const newVisualizedBuildingConfig = generateVisualizedBuildingConfig(
+        newHumanReadableBuildingConfig,
+      );
+
+      await dispatch(
+        setVisualizedBuildingConfig({ config: newVisualizedBuildingConfig }),
+      );
+      await dispatch(
+        setHumanReadableBuildingConfig({
+          config: newHumanReadableBuildingConfig,
+        }),
+      );
+
+      if (currentFloorI === 0) {
+        await dispatch(
+          setCurrentInput({
+            input: newHumanReadableBuildingConfig[currentFloorI],
+          }),
+        );
+        return;
+      }
+
+      await dispatch(setCurrentFloor({ floorI: currentFloorI - 1 }));
+      await dispatch(
+        setCurrentInput({
+          input: newHumanReadableBuildingConfig[currentFloorI - 1],
+        }),
+      );
+    },
+    [currentFloorI, dispatch, humanReadableBuildingConfig],
+  );
+
   return (
     <>
       <div className={'mt-4'}>
         <div className={'mt-4 flex flex-row justify-between items-center'}>
-          <button onClick={onPrevFloorClicked}>
+          <button onClick={handlePrevFloorClicked}>
             <p className="text-slate-500 text-xl font-bold">
               <FontAwesomeIcon icon={faBackward} />
             </p>
           </button>
 
-          <p className="text-slate-500 text-sm">{`${floorI + 1} / ${
-            humanReadableBuildingConfig.length
+          <p className="text-slate-500 text-sm">{`${currentFloorI + 1} / ${
+            visualizedBuildingConfig.length
           }`}</p>
 
-          <button onClick={onNextFloorClick}>
+          <button onClick={handleNextFloorClicked}>
             <p className="text-slate-500 text-xl font-bold">
               <FontAwesomeIcon icon={faForward} />
             </p>
@@ -47,13 +204,13 @@ const FloorControlPanel = ({
 
       <div className={'mt-4'}>
         <div className={'mt-4 flex flex-row justify-between'}>
-          <button onClick={onRemoveFloorClick}>
+          <button onClick={handleRemoveFloorClicked}>
             <p className="text-slate-500 text-2xl font-bold">
               <FontAwesomeIcon icon={faMinus} />
             </p>
           </button>
 
-          <button onClick={onAddFloorClick}>
+          <button onClick={handleAddFloorClicked}>
             <p className="text-slate-500 text-2xl font-bold">
               <FontAwesomeIcon icon={faPlus} />
             </p>

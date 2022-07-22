@@ -1,10 +1,10 @@
 const generateVisualizedBuildingConfig = (config: string[]): string[][][] => {
-  const newConfig: string[][][] = config.map(
+  const newConfig: string[][][] = config?.map(
     (floor: string, i: number): string[][] => {
-      const newLineSplit = floor.split('\n');
+      const newLineSplit = floor?.split('\n');
 
-      return newLineSplit.map((row: string) => {
-        return row.split(' ');
+      return newLineSplit?.map((row: string) => {
+        return row?.split(' ');
       });
     },
   );

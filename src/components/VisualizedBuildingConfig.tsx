@@ -1,26 +1,17 @@
 import VisualizedBuildingFloor from './VisualizedBuildingFloor';
+import { useAppSelector } from '../hooks/reduxHooks';
+import { selectVisualizedBuildingConfig } from '../reducers/configReducer';
 
-type Props = {
-  visualizedBuildingConfig: string[][][];
-  currentFloorI: number;
-};
+const VisualizedBuildingConfig = () => {
+  const visualizedBuildingConfig = useAppSelector(
+    selectVisualizedBuildingConfig,
+  );
 
-const VisualizedBuildingConfig = ({
-  visualizedBuildingConfig,
-  currentFloorI,
-}: Props) => {
   return (
     <div>
       {visualizedBuildingConfig
-        .map((floor: string[][], k: number) => {
-          return (
-            <VisualizedBuildingFloor
-              key={k}
-              floor={floor}
-              floorI={k}
-              currentFloorI={currentFloorI}
-            />
-          );
+        ?.map((floor: string[][], k: number) => {
+          return <VisualizedBuildingFloor key={k} floor={floor} floorI={k} />;
         })
         .reverse()}
     </div>

@@ -1,11 +1,6 @@
 import VisualizedBuildingConfig from './VisualizedBuildingConfig';
 
-type Props = {
-  currentFloorI: number;
-  visualizedBuildingConfig: string[][][];
-};
-
-const ConfigViewer = ({ currentFloorI, visualizedBuildingConfig }: Props) => {
+const ConfigViewer = () => {
   return (
     <div className={'border-slate-400 border-2 ml-2 w-full flex flex-col p-4'}>
       <p className={'text-slate-500 text-2xl mb-4 text-center'}>Viewer</p>
@@ -21,10 +16,7 @@ const ConfigViewer = ({ currentFloorI, visualizedBuildingConfig }: Props) => {
           </div>
 
           <div className={'flex flex-col'}>
-            <VisualizedBuildingConfig
-              currentFloorI={currentFloorI}
-              visualizedBuildingConfig={visualizedBuildingConfig}
-            />
+            <VisualizedBuildingConfig />
           </div>
 
           <div className={'ml-4 flex justify-center flex-col vertical'}>

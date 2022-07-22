@@ -1,26 +1,48 @@
 import FloorControlPanel from './FloorControlPanel';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import {
+  selectCurrentFloor,
+  selectCurrentInput,
+  selectHumanReadableBuildingConfig,
+  setCurrentInput,
+  setHumanReadableBuildingConfig,
+  setVisualizedBuildingConfig,
+} from '../reducers/configReducer';
+import { useCallback } from 'react';
+import generateVisualizedBuildingConfig from '../utils/generateVisualizedBuildingConfig';
 
-type Props = {
-  currentInput: string;
-  onCurrentInputChange: (e: any) => void;
-  onPrevFloorClicked: (e: any) => void;
-  floorI: number;
-  humanReadableBuildingConfig: string[];
-  onNextFloorClick: (e: any) => void;
-  onRemoveFloorClick: (e: any) => void;
-  onAddFloorClick: (e: any) => void;
-};
+const ConfigEditor = () => {
+  const currentInput = useAppSelector(selectCurrentInput);
+  const dispatch = useAppDispatch();
+  const currentFloorI = useAppSelector(selectCurrentFloor);
+  const humanReadableBuildingConfig = useAppSelector(
+    selectHumanReadableBuildingConfig,
+  );
 
-const ConfigEditor = ({
-  currentInput,
-  floorI,
-  humanReadableBuildingConfig,
-  onAddFloorClick,
-  onNextFloorClick,
-  onRemoveFloorClick,
-  onPrevFloorClicked,
-  onCurrentInputChange,
-}: Props) => {
+  const handleCurrentInputChange = useCallback(
+    async (e: any) => {
+      await dispatch(setCurrentInput({ input: e.target.value }));
+
+      if (e.target.value !== '') {
+        const newHumanReadableBuildingConfig = [...humanReadableBuildingConfig];
+        newHumanReadableBuildingConfig[currentFloorI] = e.target.value;
+        const newVisualizedBuildingConfig = generateVisualizedBuildingConfig(
+          newHumanReadableBuildingConfig,
+        );
+
+        await dispatch(
+          setVisualizedBuildingConfig({ config: newVisualizedBuildingConfig }),
+        );
+        await dispatch(
+          setHumanReadableBuildingConfig({
+            config: newHumanReadableBuildingConfig,
+          }),
+        );
+      }
+    },
+    [currentFloorI, dispatch, humanReadableBuildingConfig],
+  );
+
   return (
     <div
       className={
@@ -43,7 +65,7 @@ const ConfigEditor = ({
           }
           placeholder={'r - t\n|. . .|\nL - J'}
           value={currentInput}
-          onChange={onCurrentInputChange}
+          onChange={handleCurrentInputChange}
         />
 
         <div className={'ml-4 flex justify-center flex-col vertical'}>
@@ -55,14 +77,7 @@ const ConfigEditor = ({
         <p className="text-slate-500 text-xs">Back</p>
       </div>
 
-      <FloorControlPanel
-        onPrevFloorClicked={onPrevFloorClicked}
-        floorI={floorI}
-        humanReadableBuildingConfig={humanReadableBuildingConfig}
-        onNextFloorClick={onNextFloorClick}
-        onRemoveFloorClick={onRemoveFloorClick}
-        onAddFloorClick={onAddFloorClick}
-      />
+      <FloorControlPanel />
     </div>
   );
 };

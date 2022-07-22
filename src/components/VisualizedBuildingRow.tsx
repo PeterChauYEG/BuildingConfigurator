@@ -7,7 +7,7 @@ type Props = {
 const VisualizedBuildingRow = ({ row }: Props) => {
   return (
     <div className={'flex flex-row mb-2 h-10 items-center'}>
-      {row.map((element: string, j: number) => (
+      {row?.map((element: string, j: number) => (
         <VisualizedBuildingElement element={element} key={j} />
       ))}
     </div>
