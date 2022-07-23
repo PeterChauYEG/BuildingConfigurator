@@ -2,7 +2,10 @@ import VisualizedBuildingConfig from './VisualizedBuildingConfig';
 
 const ConfigViewer = () => {
   return (
-    <div className={'border-slate-400 border-2 ml-2 w-full flex flex-col p-4'}>
+    <div
+      className={
+        'border-slate-400 border-2 ml-2 flex flex-col p-4 rounded-lg flex-1'
+      }>
       <p className={'text-slate-500 text-2xl mb-4 text-center'}>Viewer</p>
 
       <div className={''}>

@@ -46,7 +46,7 @@ const ConfigEditor = () => {
   return (
     <div
       className={
-        'border border-slate-400 border-2 mr-2 w-full flex flex-col p-4'
+        'border border-slate-400 border-2 mr-2 flex flex-col p-4 rounded-lg flex-0 min-w-[33vw]'
       }>
       <p className={'text-slate-500 text-2xl mb-4 text-center'}>Editor</p>
 
@@ -61,9 +61,11 @@ const ConfigEditor = () => {
 
         <textarea
           className={
-            'w-full border border-slate-400 bg-slate-300 p-2 h-[20vh] text-slate-500 text-lg'
+            'w-full border border-slate-400 bg-slate-300 p-2 h-[20vh] text-slate-500 text-lg rounded-lg'
           }
-          placeholder={'r - t\n|. . .|\nL - J'}
+          placeholder={
+            'r - -D -W t\n|. . . . .|\n|. . . . .|\n|. . . . .|\nL _ x _ J'
+          }
           value={currentInput}
           onChange={handleCurrentInputChange}
         />

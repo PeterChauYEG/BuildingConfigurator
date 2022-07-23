@@ -11,7 +11,7 @@ const VisualizedBuildingFloor = ({ floor, floorI }: Props) => {
   const currentFloorI = useAppSelector(selectCurrentFloor);
 
   let floorStyle =
-    'border border-4 p-4 justify-center flex flex-col items-center flip relative top-0 left-0';
+    'border border-4 p-4 justify-center flex flex-col items-center flip relative top-0 left-0 drop-shadow-[20px_-20px_3px_rgba(0,0,0,0.2)] mb-[-56px]';
 
   if (currentFloorI === floorI) {
     floorStyle += ' border-slate-500';

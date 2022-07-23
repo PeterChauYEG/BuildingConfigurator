@@ -31,7 +31,7 @@ const ExportPanel = () => {
     <div className={'flex justify-center'}>
       <button
         onClick={handleExportClicked}
-        className={'bg-slate-400 rounded-xl p-2 min-w-[200px]'}>
+        className={'bg-slate-400 rounded-xl p-2 min-w-[200px] drop-shadow-lg'}>
         <p className="text-slate-200 text-2xl">Export</p>
       </button>
     </div>

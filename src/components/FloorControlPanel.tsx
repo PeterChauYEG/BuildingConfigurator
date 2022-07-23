@@ -18,6 +18,8 @@ import {
 } from '../reducers/configReducer';
 import { useCallback } from 'react';
 import generateVisualizedBuildingConfig from '../utils/generateVisualizedBuildingConfig';
+import ExportPanel from './ExportPanel';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const FloorControlPanel = () => {
   const dispatch = useAppDispatch();
@@ -180,6 +182,38 @@ const FloorControlPanel = () => {
     [currentFloorI, dispatch, humanReadableBuildingConfig],
   );
 
+  useHotkeys(
+    'ctrl+d, ctrl+w',
+    () => {
+      handleNextFloorClicked(null);
+    },
+    [currentFloorI, humanReadableBuildingConfig, currentInput, dispatch],
+  );
+
+  useHotkeys(
+    'ctrl+a, ctrl+s',
+    () => {
+      handlePrevFloorClicked(null);
+    },
+    [currentFloorI, humanReadableBuildingConfig, currentInput, dispatch],
+  );
+
+  useHotkeys(
+    'ctrl+enter',
+    () => {
+      handleAddFloorClicked(null);
+    },
+    [humanReadableBuildingConfig, currentFloorI, currentInput, dispatch],
+  );
+
+  useHotkeys(
+    'ctrl+delete',
+    () => {
+      handleRemoveFloorClicked(null);
+    },
+    [currentFloorI, dispatch, humanReadableBuildingConfig],
+  );
+
   return (
     <>
       <div className={'mt-4'}>
@@ -202,7 +236,7 @@ const FloorControlPanel = () => {
         </div>
       </div>
 
-      <div className={'mt-4'}>
+      <div className={'mt-4 mb-20'}>
         <div className={'mt-4 flex flex-row justify-between'}>
           <button onClick={handleRemoveFloorClicked}>
             <p className="text-slate-500 text-2xl font-bold">
@@ -217,6 +251,8 @@ const FloorControlPanel = () => {
           </button>
         </div>
       </div>
+
+      <ExportPanel />
     </>
   );
 };
